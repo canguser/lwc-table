@@ -5,6 +5,10 @@
         <name>ApexClass</name>
     </types>
     <types>
+        <members>LWCTestApp</members>
+        <name>AuraDefinitionBundle</name>
+    </types>
+    <types>
         <members>lifecycleElement</members>
         <members>table</members>
         <members>utils</members>

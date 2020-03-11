@@ -65,6 +65,32 @@ export default class Demo01 extends LightningElement {
                 field: 'age',
                 header: {label: 'Age'}
             },
+            {
+                field: 'action',
+                header: {label: '', width: '2rem'},
+                cell: {
+                    actions: [
+                        {
+                            icon: 'utility:delete',
+                            identity: 'delete',
+                            status: 'always'
+                        },
+                        {
+                            icon: 'utility:close',
+                            identity: 'close',
+                            status: 'always'
+                        }
+                    ],
+                },
+                callback: {
+                    onActionClick: ({field, identity, row, rows, index}) => {
+                        if (identity === 'delete') {
+                            const id = row.id;
+                            this.userList = this.userList.filter(user => user.id !== id);
+                        }
+                    }
+                }
+            }
         ]
     }
 }

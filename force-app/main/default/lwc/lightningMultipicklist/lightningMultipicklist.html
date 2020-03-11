@@ -1,0 +1,18 @@
+<!--
+ - Created by ryan on 2019-08-09.
+ -->
+
+<!-- Lightning Multipicklist -->
+<template>
+    <div class="slds-form-element">
+        <label if:false={hideLabel} class="slds-form-element__label" for="select-multi">Select Label</label>
+        <div class="slds-form-element__control">
+            <select class="slds-select multi-selector" id="select-multi" multiple="multiple" onchange={whileSelectorChanged}>
+                <template for:each={parsedOptions} for:item="option">
+                    <option key={option.key} selected='selected' value={option.value} if:true={option.selected}>{option.label}</option>
+                    <option key={option.key} if:false={option.selected} value={option.value}>{option.label}</option>
+                </template>
+            </select>
+        </div>
+    </div>
+</template>

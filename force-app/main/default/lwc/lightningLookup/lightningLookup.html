@@ -1,0 +1,65 @@
+<!--
+ - Created by ryan on 2019-08-08.
+ -->
+
+<!-- Lightning Lookup -->
+<template>
+    <div>
+        <div>
+            <!--{v}-->
+            <lightning-input
+                    class="searing-input"
+                    type="search"
+                    required={required}
+                    readonly={readonly}
+                    disabled={disabled}
+                    value={displayValue}
+                    name={name}
+                    message-when-value-missing={messageWhenValueMissing}
+                    is-loading={isSearching}
+                    variant={variant}
+                    label={label}
+                    onchange={handleChanged}
+                    onfocus={handleFocus}
+                    onblur={handleBlur}>
+            </lightning-input>
+        </div>
+        <div if:true={showCombobox} class="slds-is-relative slds-size--12-of-12" onmousedown={preventEvent}>
+            <div class={comboboxClass}>
+                <ul class="slds-listbox slds-listbox_vertical">
+                    <template if:true={hasItems} for:each={itemsWithDescribe} for:item="item">
+                        <li class="slds-listbox__item slds-border--bottom" key={item.referenceId}
+                            data-reference-id={item.referenceId}
+                            data-reference-name={item.referenceName}
+                            onmousedown={handleClick}>
+                            <div class="slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta slds-grid slds-grid_vertical-align-center">
+                                <div class="slds-m-right_small">
+                                    <lightning-icon icon-name={recordIcon} size="medium"></lightning-icon>
+                                </div>
+                                <div class="slds-media__body slds-truncate">
+                                    <span if:true={noDesc}>
+                                        <span class="slds-listbox__option-text">{item.referenceName}</span>
+                                    </span>
+                                    <span if:false={noDesc}>
+                                        <span class="slds-listbox__option-text slds-listbox__option-text_entity">{item.referenceName}</span>
+                                        <span class="slds-listbox__option-meta slds-listbox__option-meta_entity slds-text-color_weak slds-text-title slds-truncate">{item.describe}</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </li>
+                    </template>
+                    <li if:false={hasItems} class="slds-listbox__item slds-border--bottom">
+                        <div class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta">
+                            <span class="slds-media__figure">
+                                <span class="slds-icon_container slds-icon-standard-account"></span>
+                            </span>
+                            <span class="slds-media__body">
+                                <span class="slds-listbox__option-text slds-listbox__option-text_entity">No references found.</span>
+                            </span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</template>

@@ -4,6 +4,9 @@
         <members>lifecycleElement</members>
         <members>table</members>
         <members>utils</members>
+        <members>lightningHelpText</members>
+        <members>lightningLookup</members>
+        <members>lightningMultipicklist</members>
         <name>LightningComponentBundle</name>
     </types>
     <types>

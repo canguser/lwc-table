@@ -6,6 +6,7 @@
 .sfdx/
 .VSCode/
 .localdevserver/
+.idea/
 IlluminatedCloud/
 
 # LWC VSCode autocomplete

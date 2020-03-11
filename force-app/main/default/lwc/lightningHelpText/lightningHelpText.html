@@ -1,0 +1,26 @@
+<!--
+ - Created by ryan on 2019/11/8.
+ -->
+
+<!-- Lightning Help Text -->
+<template>
+    <div class="helptext-container">
+        <button class="slds-button popover-icon">
+            <lightning-icon icon-name={iconName}
+                            size="xx-small"
+                            variant={iconVariant}
+                            alternative-text={content}></lightning-icon>
+        </button>
+        <div class={popoverClassName}>
+            <div class="slds-popover__body">
+                <slot name="content">
+                    <template for:each={contentSplits} for:item="split">
+                        <p key={split.key} class="text-content">
+                            <lightning-formatted-text value={split.value}></lightning-formatted-text>
+                        </p>
+                    </template>
+                </slot>
+            </div>
+        </div>
+    </div>
+</template>

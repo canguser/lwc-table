@@ -1,0 +1,29 @@
+/**
+ * Created by ryan on 2019/11/8.
+ */
+.helptext-container {
+    display: inline-block;
+    position: relative;
+}
+.popover-tooltip{
+    position: absolute;
+    display: none;
+}
+.popover-tooltip_bottom-left {
+    bottom: 1.75rem;
+    left: -1rem;
+}
+
+.popover-tooltip_bottom-right {
+    bottom: 1.75rem;
+    right: -1rem;
+}
+
+.popover-icon:hover + .popover-tooltip {
+    display: inline-block;
+}
+
+.text-content {
+    line-height: 1rem;
+    font-weight: normal;
+}

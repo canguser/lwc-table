@@ -4,8 +4,8 @@
 
 import { api, track } from 'lwc';
 import LifecycleElement from 'c/lifecycleElement';
-import getReferenceObject from '@salesforce/apex/ForecastingService.getReferenceObject';
-import getObjectName from '@salesforce/apex/ForecastingService.getObjectName';
+import getReferenceObject from '@salesforce/apex/LookupHelper.getReferenceObject';
+import getObjectName from '@salesforce/apex/LookupHelper.getObjectName';
 
 export default class LightningLookup extends LifecycleElement {
 

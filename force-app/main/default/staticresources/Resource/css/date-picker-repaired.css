@@ -1,0 +1,64 @@
+.repair-datepicker.clear-user-agent-styles table,
+.repair-datepicker.clear-user-agent-styles thead,
+.repair-datepicker.clear-user-agent-styles tbody,
+.repair-datepicker.clear-user-agent-styles tfoot,
+.repair-datepicker.clear-user-agent-styles tr,
+.repair-datepicker.clear-user-agent-styles th,
+.repair-datepicker.clear-user-agent-styles td {
+    font-weight: inherit;
+}
+
+.repair-datepicker {
+    /*border-color: rgb(128, 128, 128);*/
+    /*border-collapse: collapse;*/
+    /*box-sizing: border-box;*/
+    /*font-family: "Salesforce Sans", Arial, sans-serif;*/
+    /*height: auto;*/
+    /*-webkit-border-horizontal-spacing: 0px;*/
+    /*-webkit-border-vertical-spacing: 0px;*/
+    /*-webkit-tap-highlight-color: rgba(0, 0, 0, 0);*/
+}
+
+table .repair-datepicker table {
+    color: rgb(22, 50, 92);
+    display: table;
+    line-height: 18px;
+    width: 100%;
+}
+
+table .repair-datepicker thead tr {
+    border-bottom-color: rgb(240, 241, 242);
+    display: table-row;
+    font-size: 12px;
+    line-height: 18px;
+    vertical-align: middle;
+    width: auto;
+}
+
+table .repair-datepicker tbody {
+    border-collapse: collapse;
+    box-sizing: border-box;
+    color: rgb(22, 50, 92);
+    display: table-row-group;
+    line-height: 18px;
+    vertical-align: middle;
+    width: auto;
+}
+
+table .repair-datepicker tbody tr {
+    display: table-row;
+}
+
+table .repair-datepicker .slds-dropdown-trigger_click.slds-is-open .slds-dropdown {
+    top: 30px !important;
+}
+
+table .repair-datepicker tbody tr td {
+    display: table-cell;
+    line-height: 18px;
+    padding: .25rem;
+    text-align: center;
+    vertical-align: middle;
+    width: auto;
+    border: none;
+}

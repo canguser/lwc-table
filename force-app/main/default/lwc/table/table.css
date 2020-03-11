@@ -1,0 +1,218 @@
+/**
+ * Created by ryan on 2019-07-26.
+ */
+.position-to-top-xx-small {
+    position: relative;
+    top: -.1rem;
+}
+
+.cell {
+    padding-bottom: .2rem;
+}
+
+.cell-text {
+    position: relative;
+    top: .2rem;
+}
+
+.editor {
+    display: none;
+}
+
+.table-cell {
+    transition: all .3s;
+}
+
+.table-cell:hover .editor {
+    display: inline-block;
+}
+
+.editor-input {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.editor-input.outer-editor {
+    width: auto;
+}
+
+.editor-input > div.action {
+    flex-shrink: 0;
+}
+
+.editor-input .cell-input {
+    flex-shrink: 1;
+    flex-grow: 1;
+}
+
+.cell-input {
+    transform: translateZ(0);
+}
+
+table.auto-width .editor-input .cell-input > * {
+    min-width: 15rem;
+}
+
+.cell-main {
+    position: relative;
+    top: 0.2rem;
+}
+
+.cell-box {
+    display: flex;
+    justify-content: space-between;
+}
+
+/*.cell-content {*/
+/*flex-grow: 1;*/
+/*}*/
+
+/*.cell-start .cell-end {*/
+/*flex-shrink: 0;*/
+/*}*/
+
+th._align-center .cell-content, td._align-center .cell-content {
+    justify-content: center;
+}
+
+th._align-left .cell-content, td._align-left .cell-content {
+    justify-content: flex-start;
+}
+
+th._align-right .cell-content, td._align-right .cell-content {
+    justify-content: flex-end;
+}
+
+.cell-start {
+    position: absolute;
+    top: 50%;
+    left: 0.25rem;
+    transform: translateY(-50%);
+}
+
+.cell-end {
+    position: absolute;
+    top: 50%;
+    right: 0.25rem;
+    transform: translateY(-50%);
+}
+
+table.no-padding-cell td,
+table.no-padding-cell th {
+    padding: 0;
+}
+
+.has-cell-start .slds-th__action.cell-action {
+    padding-left: 1.5rem;
+}
+
+.has-cell-end .slds-th__action.cell-action {
+    padding-right: 1.5rem;
+}
+
+.slds-th__action.cell-inner:hover {
+    background-color: white;
+    box-shadow: var(--lwc-colorBorder, rgb(221, 219, 218)) 0 calc(-1 * var(--lwc-borderWidthThin, 1px)) 0 inset, var(--lwc-colorBorder, rgb(221, 219, 218)) 0 1px 0 inset
+}
+
+/* wrap */
+td.wrapped-cell .cell-action {
+    height: auto;
+    padding: .4rem .5rem .5rem .25rem;
+}
+
+td.wrapped-cell .cell-action .slds-truncate {
+    white-space: pre-wrap;
+}
+
+table.auto-width {
+    width: auto;
+}
+
+.table-box {
+    /*width: 100%;*/
+    /*overflow-x: auto;*/
+    /*background-color: #dddbda;*/
+}
+
+.outer-editor {
+    position: absolute;
+    min-width: 15rem;
+    border: 1px solid #efefef;
+    border-radius: 6px;
+    background-color: white;
+    z-index: 999;
+    box-shadow: 1px 1px 1px 1px #a1a1a1;
+    top: 0;
+}
+
+.shown-on-hover:hover {
+    position: absolute;
+    background: white;
+    z-index: 998;
+    min-width: 100%;
+    top: 0;
+    /*box-shadow: 0 0 1px 1px #ebebeb;*/
+    /*border-radius: 3px;*/
+}
+
+.shown-on-hover-right:hover {
+    right: 0;
+}
+
+.outer-editor-right {
+    right: 0;
+}
+
+table.hide-overflow {
+    overflow: hidden;
+}
+
+table.hide-overflow td.column-highlight {
+    position: relative;
+}
+
+table.hide-overflow td.column-highlight:hover:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -9999px;
+    bottom: -9999px;
+    background-color: rgba(1, 2, 3, 0.08);
+    /*border-left: blue;*/
+    /*border-right: blue;*/
+    z-index: -1;
+}
+
+tr.none-highlight td {
+    background: #fafaf9;
+    z-index: -1;
+}
+
+tr.none-highlight:hover td {
+    background: #fafaf9 !important;
+    box-shadow: none !important;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+td:hover .action-hover {
+    visibility: visible;
+}
+
+tr:hover .action-row-hover {
+    visibility: visible;
+}
+
+.waiting-background {
+    background: rgb(250, 245, 230);
+}
+
+.editor-input.error {
+    background: #ffe6c4;
+}

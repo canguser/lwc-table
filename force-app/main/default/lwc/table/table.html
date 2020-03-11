@@ -1,0 +1,565 @@
+<!--
+ - Created by ryan on 2019-07-25.
+ -->
+
+<!-- Table -->
+<template>
+    <div class={tableBoxClass}>
+        <div class={tableContainerClass} onscroll={handleScroll} style={tableBoxStyle}>
+            <table aria-multiselectable="true"
+                   class={tableClass}
+                   role="grid">
+                <tbody class="table-body">
+                <template for:each={computedRows} for:item="row" for:index="rowIndex">
+                    <tr class={row.rowClass} key={row.identity}>
+                        <template for:each={row.cells} for:item="cell" for:index="cellIndex">
+                            <td role="gridcell" class={cell.tdClass} key={cell.symbol}
+                                data-cell-r-index={cell.index}
+                                data-cell-c-index={cell.cIndex}
+                                title={cell.title} ondblclick={cell.dblclick}
+                                onmouseenter={cell.onMouseIn} onmouseleave={cell.onMouseOut}
+                                style={cell.style}>
+                                <div class={cell.hoverClass}>
+                                    <div if:false={cell.extra.$isEdit} class="slds-th__action cell-action cell-inner">
+                                        <div class="cell-start">
+                                            <div if:true={cell.editIconPosition.isStart} class="editor">
+                                                <lightning-button-icon
+                                                        icon-name="utility:edit"
+                                                        variant="bare"
+                                                        alternative-text="Edit"
+                                                        name={cell}
+                                                        onclick={cell.onEdit}
+                                                >
+                                                </lightning-button-icon>
+                                            </div>
+                                            <div class="cell-tip">
+                                                <div if:true={cell.isCustomCellTip}>
+                                                    <c-lightning-help-text if:true={cell.cellTipPosition.isStart}
+                                                                           icon-name={cell.cellTipIcon}
+                                                                           icon-variant={cell.cellTipVariant}
+                                                                           content={cell.cellTip}></c-lightning-help-text>
+                                                </div>
+                                                <div if:false={cell.isCustomCellTip}>
+                                                    <lightning-helptext if:true={cell.cellTipPosition.isStart}
+                                                                        icon-name={cell.cellTipIcon}
+                                                                        icon-variant={cell.cellTipVariant}
+                                                                        content={cell.cellTip}></lightning-helptext>
+                                                </div>
+                                            </div>
+                                            <template for:each={cell.actions} for:item="action">
+                                                <div class={action.class} key={action.identity}
+                                                     if:true={action.position.isStart}>
+                                                    <div if:true={action.isIconType}>
+                                                        <button class={action.buttonClass}
+                                                                disabled={action.disabled}
+                                                                data-action-identity={action.identity}
+                                                                data-row-identity={row.identity}
+                                                                data-row-field={cell.field}
+                                                                onclick={cell.onActionClick}>
+                                                            <lightning-icon icon-name={action.icon}
+                                                                            variant={action.iconVariant}
+                                                                            size={action.size}
+                                                                            alternative-text={action.describe}></lightning-icon>
+                                                        </button>
+                                                    </div>
+                                                    <div if:true={action.isButtonType}>
+                                                        <lightning-button
+                                                                name={action.tempData}
+                                                                value={action.content}
+                                                                variant={action.buttonVariant}
+                                                                disabled={action.isDisabled}
+                                                                icon-name={action.icon}
+                                                                icon-position={action.iconPosition}
+                                                                onclick={cell.onActionClick}></lightning-button>
+                                                    </div>
+                                                    <div if:true={action.isButtonIconType}>
+                                                        <lightning-button-icon alternative-text={action.describe}
+                                                                               variant={action.buttonIconVariant}
+                                                                               name={action.tempData}
+                                                                               icon-class={action.iconClass}
+                                                                               icon-name={action.icon}
+                                                                               tooltip={action.tooltip}
+                                                                               disabled={action.isDisabled}
+                                                                               onclick={cell.onActionClick}></lightning-button-icon>
+                                                    </div>
+                                                    <div if:true={action.isDynamicIconType}>
+                                                        <div data-action-identity={action.identity}
+                                                             data-row-identity={row.identity}
+                                                             data-row-field={cell.field}
+                                                             onclick={cell.onActionClick}>
+                                                            <lightning-dynamic-icon
+                                                                    type={action.dynamicType}
+                                                                    option={action.dynamicOption}
+                                                                    alternative-text={action.describe}>
+                                                            </lightning-dynamic-icon>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                        </div>
+                                        <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate cell-content"
+                                             style={cell.spanStyle}>
+                                <span if:true={cell.isTreeHeader}>
+                                    <lightning-button-icon
+                                            if:true={cell.showExpand}
+                                            icon-name={cell.treeIcon}
+                                            variant="bare"
+                                            alternative-text="Toggle Expanding"
+                                            size="medium"
+                                            name={cell}
+                                            onclick={cell.onToggleExpand}
+                                    >
+                                    </lightning-button-icon>
+                                    &nbsp;
+                                </span>
+                                            <div class="cell-tip">
+                                                <div if:true={cell.isCustomCellTip}>
+                                                    <c-lightning-help-text if:true={cell.cellTipPosition.isInsertBefore}
+                                                                           icon-name={cell.cellTipIcon}
+                                                                           icon-variant={cell.cellTipVariant}
+                                                                           content={cell.cellTip}></c-lightning-help-text>
+                                                </div>
+                                                <div if:false={cell.isCustomCellTip}>
+                                                    <lightning-helptext if:true={cell.cellTipPosition.isInsertBefore}
+                                                                        class="slds-p-bottom--xx-small"
+                                                                        icon-name={cell.cellTipIcon}
+                                                                        icon-variant={cell.cellTipVariant}
+                                                                        content={cell.cellTip}></lightning-helptext>
+                                                </div>
+                                            </div>
+                                            <div if:true={cell.editIconPosition.isInsertBefore} class="editor">
+                                                <lightning-button-icon
+                                                        icon-name="utility:edit"
+                                                        variant="bare"
+                                                        alternative-text="Edit"
+                                                        name={cell}
+                                                        onclick={cell.onEdit}
+                                                >
+                                                </lightning-button-icon>
+                                            </div>
+                                            <template for:each={cell.actions} for:item="action">
+                                                <div class={action.class} key={action.identity}
+                                                     if:true={action.position.isInsertBefore}>
+                                                    <div if:true={action.isIconType}>
+                                                        <button class={action.buttonClass}
+                                                                disabled={action.disabled}
+                                                                data-action-identity={action.identity}
+                                                                data-row-identity={row.identity}
+                                                                data-row-field={cell.field}
+                                                                onclick={cell.onActionClick}>
+                                                            <lightning-icon icon-name={action.icon}
+                                                                            variant={action.iconVariant}
+                                                                            size={action.size}
+                                                                            alternative-text={action.describe}></lightning-icon>
+                                                        </button>
+                                                    </div>
+                                                    <div if:true={action.isButtonType}>
+                                                        <lightning-button
+                                                                name={action.tempData}
+                                                                value={action.content}
+                                                                variant={action.buttonVariant}
+                                                                disabled={action.isDisabled}
+                                                                icon-name={action.icon}
+                                                                icon-position={action.iconPosition}
+                                                                onclick={cell.onActionClick}></lightning-button>
+                                                    </div>
+                                                    <div if:true={action.isButtonIconType}>
+                                                        <lightning-button-icon alternative-text={action.describe}
+                                                                               name={action.tempData}
+                                                                               variant={action.buttonIconVariant}
+                                                                               icon-class={action.iconClass}
+                                                                               icon-name={action.icon}
+                                                                               tooltip={action.tooltip}
+                                                                               disabled={action.isDisabled}
+                                                                               onclick={cell.onActionClick}></lightning-button-icon>
+                                                    </div>
+                                                    <div if:true={action.isDynamicIconType}>
+                                                        <div data-action-identity={action.identity}
+                                                             data-row-identity={row.identity}
+                                                             data-row-field={cell.field}
+                                                             onclick={cell.onActionClick}>
+                                                            <lightning-dynamic-icon
+                                                                    type={action.dynamicType}
+                                                                    option={action.dynamicOption}
+                                                                    alternative-text={action.describe}>
+                                                            </lightning-dynamic-icon>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                            <lightning-button if:true={cell.isButton}
+                                                              label={cell.value}
+                                                              variant={cell.buttonVariant}
+                                                              name={cell}
+                                                              disabled={cell.buttonDisabled}
+                                                              onclick={cell.onButtonClick}></lightning-button>
+                                            <span class="slds-truncate cell-main">
+                                            <lightning-avatar if:true={cell.hasAvatar} class="slds-m-right--xx-small position-to-top-xx-small"
+                                                              alternative-text="avatar" variant="circle" size="x-small"
+                                                              src={cell.avatarUrl}></lightning-avatar>
+                                            <a if:true={cell.usingUrl} href={cell.url} data-row-identity={row.identity}
+                                               onclick={cell.onUrlClick}>
+                                            {cell.value}
+                                            </a>
+                                            <span if:false={cell.usingUrl}>
+                                                <lightning-input if:true={cell.isBoolean} type="checkbox" disabled
+                                                                 variant="label-hidden" label={cell.label}
+                                                                 checked={cell.value}></lightning-input>
+                                                <span if:true={cell.isStandard}>{cell.value}</span>
+                                            </span>
+                                        </span>
+                                            <div class="cell-tip">
+                                                <div if:true={cell.isCustomCellTip}>
+                                                    <div if:true={cell.cellTipPosition.isAppend}>
+                                                        &nbsp;
+                                                        <c-lightning-help-text if:true={cell.cellTipPosition.isAppend}
+                                                                               icon-name={cell.cellTipIcon}
+                                                                               icon-variant={cell.cellTipVariant}
+                                                                               content={cell.cellTip}></c-lightning-help-text>
+                                                    </div>
+                                                </div>
+                                                <div if:false={cell.isCustomCellTip}>
+                                                    <div if:true={cell.cellTipPosition.isAppend}>
+                                                        &nbsp;
+                                                        <lightning-helptext icon-name={cell.cellTipIcon}
+                                                                            icon-variant={cell.cellTipVariant}
+                                                                            content={cell.cellTip}></lightning-helptext>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div if:true={cell.editIconPosition.isAppend} class="editor">
+                                                <lightning-button-icon
+                                                        icon-name="utility:edit"
+                                                        variant="bare"
+                                                        alternative-text="Edit"
+                                                        name={cell}
+                                                        onclick={cell.onEdit}
+                                                >
+                                                </lightning-button-icon>
+                                            </div>
+                                            <template for:each={cell.actions} for:item="action">
+                                                <div class={action.class} key={action.identity}
+                                                     if:true={action.position.isAppend}>
+                                                    <div if:true={action.isIconType}>
+                                                        <button class={action.buttonClass}
+                                                                disabled={action.disabled}
+                                                                data-action-identity={action.identity}
+                                                                data-row-identity={row.identity}
+                                                                data-row-field={cell.field}
+                                                                onclick={cell.onActionClick}>
+                                                            <lightning-icon icon-name={action.icon}
+                                                                            variant={action.iconVariant}
+                                                                            size={action.size}
+                                                                            alternative-text={action.describe}></lightning-icon>
+                                                        </button>
+                                                    </div>
+                                                    <div if:true={action.isButtonType}>
+                                                        <lightning-button
+                                                                name={action.tempData}
+                                                                value={action.content}
+                                                                variant={action.buttonVariant}
+                                                                disabled={action.isDisabled}
+                                                                icon-name={action.icon}
+                                                                icon-position={action.iconPosition}
+                                                                onclick={cell.onActionClick}></lightning-button>
+                                                    </div>
+                                                    <div if:true={action.isButtonIconType}>
+                                                        <lightning-button-icon alternative-text={action.describe}
+                                                                               name={action.tempData}
+                                                                               variant={action.buttonIconVariant}
+                                                                               icon-name={action.icon}
+                                                                               icon-class={action.iconClass}
+                                                                               tooltip={action.tooltip}
+                                                                               disabled={action.isDisabled}
+                                                                               onclick={cell.onActionClick}></lightning-button-icon>
+                                                    </div>
+                                                    <div if:true={action.isDynamicIconType}>
+                                                        <div data-action-identity={action.identity}
+                                                             data-row-identity={row.identity}
+                                                             data-row-field={cell.field}
+                                                             onclick={cell.onActionClick}>
+                                                            <lightning-dynamic-icon
+                                                                    type={action.dynamicType}
+                                                                    option={action.dynamicOption}
+                                                                    alternative-text={action.describe}>
+                                                            </lightning-dynamic-icon>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                        </div>
+                                        <div class="cell-end">
+                                            <div if:true={cell.editIconPosition.isEnd} class="editor">
+                                                <lightning-button-icon
+                                                        icon-name="utility:edit"
+                                                        variant="bare"
+                                                        alternative-text="Edit"
+                                                        name={cell}
+                                                        onclick={cell.onEdit}
+                                                >
+                                                </lightning-button-icon>
+                                            </div>
+                                            <div class="cell-tip">
+                                                <div if:true={cell.isCustomCellTip}>
+                                                    <c-lightning-help-text if:true={cell.cellTipPosition.isEnd}
+                                                                           icon-name={cell.cellTipIcon}
+                                                                           icon-variant={cell.cellTipVariant}
+                                                                           content={cell.cellTip}></c-lightning-help-text>
+                                                </div>
+                                                <div if:false={cell.isCustomCellTip}>
+                                                    <lightning-helptext if:true={cell.cellTipPosition.isEnd}
+                                                                        icon-name={cell.cellTipIcon}
+                                                                        icon-variant={cell.cellTipVariant}
+                                                                        content={cell.cellTip}></lightning-helptext>
+                                                </div>
+                                            </div>
+                                            <template for:each={cell.actions} for:item="action">
+                                                <div class={action.class} key={action.identity}
+                                                     if:true={action.position.isEnd}>
+                                                    <div if:true={action.isIconType}>
+                                                        <button class={action.buttonClass}
+                                                                disabled={action.disabled}
+                                                                data-action-identity={action.identity}
+                                                                data-row-identity={row.identity}
+                                                                data-row-field={cell.field}
+                                                                onclick={cell.onActionClick}>
+                                                            <lightning-icon icon-name={action.icon}
+                                                                            variant={action.iconVariant}
+                                                                            size={action.size}
+                                                                            alternative-text={action.describe}></lightning-icon>
+                                                        </button>
+                                                    </div>
+                                                    <div if:true={action.isButtonType}>
+                                                        <lightning-button
+                                                                name={action.tempData}
+                                                                value={action.content}
+                                                                variant={action.buttonVariant}
+                                                                disabled={action.isDisabled}
+                                                                icon-name={action.icon}
+                                                                icon-position={action.iconPosition}
+                                                                onclick={cell.onActionClick}></lightning-button>
+                                                    </div>
+                                                    <div if:true={action.isButtonIconType}>
+                                                        <lightning-button-icon alternative-text={action.describe}
+                                                                               name={action.tempData}
+                                                                               variant={action.buttonIconVariant}
+                                                                               icon-class={action.iconClass}
+                                                                               icon-name={action.icon}
+                                                                               tooltip={action.tooltip}
+                                                                               disabled={action.isDisabled}
+                                                                               onclick={cell.onActionClick}></lightning-button-icon>
+                                                    </div>
+                                                    <div if:true={action.isDynamicIconType}>
+                                                        <div data-action-identity={action.identity}
+                                                             data-row-identity={row.identity}
+                                                             data-row-field={cell.field}
+                                                             data-row-index={cell.index}
+                                                             onclick={cell.onActionClick}>
+                                                            <lightning-dynamic-icon
+                                                                    type={action.dynamicType}
+                                                                    option={action.dynamicOption}
+                                                                    alternative-text={action.describe}>
+                                                            </lightning-dynamic-icon>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </div>
+                                    <div if:true={cell.extra.$isEdit} class={cell.editorClass} onclick={preventEvent}>
+                                        <lightning-helptext class="slds-m-right--x-small slds-m-bottom--xx-small"
+                                                            if:true={cell.extra.$hasError} icon-variant="error"
+                                                            content={cell.extra.$errorMessage}></lightning-helptext>
+                                        <div if:true={cell.extra.typeFlag.$is_input}
+                                             class="cell-input repair-datepicker">
+                                            <lightning-input label={cell.label}
+                                                             name={cell}
+                                                             placeholder={cell.label}
+                                                             variant="label-hidden"
+                                                             class={cell.extra.$editorId}
+                                                             value={cell.extra.$editorValue}
+                                                             checked={cell.extra.$editorValue}
+                                                             type={cell.extra.$editorType}
+                                                             min={cell.extra.editorOption.$min}
+                                                             max={cell.extra.editorOption.$max}
+                                                             formatter={cell.extra.editorOption.$formatter}
+                                                             step={cell.extra.editorOption.$step}
+                                                             message-when-pattern-mismatch={cell.extra.editorOption.$messageWhenPatternMismatch}
+                                                             pattern={cell.extra.editorOption.$pattern}
+                                                             onchange={cell.extra.$assignValue}>
+                                            </lightning-input>
+                                        </div>
+                                        <div if:true={cell.extra.typeFlag.$is_reference} class="cell-input">
+                                            <c-lightning-lookup label={cell.label}
+                                                                name={cell}
+                                                                variant="label-hidden"
+                                                                class={cell.extra.$editorId}
+                                                                value={cell.extra.$editorValue}
+                                                                desc-fields={cell.extra.editorOption.$descFields}
+                                                                compare-fields={cell.extra.editorOption.$compareFields}
+                                                                no-desc={cell.extra.editorOption.$noDesc}
+                                                                lookup-to={cell.extra.editorOption.$referenceAPI}
+                                                                onchange={cell.extra.$assignValue}>
+                                            </c-lightning-lookup>
+                                        </div>
+                                        <div if:true={cell.extra.typeFlag.$is_picklist} class="cell-input">
+                                            <lightning-combobox label={cell.label}
+                                                                name={cell}
+                                                                options={cell.extra.editorOption.$options}
+                                                                variant="label-hidden"
+                                                                class={cell.extra.$editorId}
+                                                                value={cell.extra.$editorValue}
+                                                                onchange={cell.extra.$assignValue}>
+                                            </lightning-combobox>
+                                        </div>
+                                        <div if:true={cell.extra.typeFlag.$is_multipicklist} class="cell-input">
+                                            <c-lightning-multipicklist
+                                                    label={cell.label}
+                                                    name={cell}
+                                                    options={cell.extra.editorOption.$options}
+                                                    variant="label-hidden"
+                                                    class={cell.extra.$editorId}
+                                                    value={cell.extra.$editorValue}
+                                                    onchange={cell.extra.$assignValue}>
+                                            </c-lightning-multipicklist>
+                                        </div>
+                                        <div if:true={cell.extra.typeFlag.$is_textarea} class="cell-input">
+                                            <lightning-textarea
+                                                    label={cell.label}
+                                                    name={cell}
+                                                    placeholder={cell.label}
+                                                    variant="label-hidden"
+                                                    class={cell.extra.$editorId}
+                                                    value={cell.extra.$editorValue}
+                                                    onchange={cell.extra.assignValue}>
+                                            </lightning-textarea>
+                                        </div>
+                                        <div class="action slds-p-left--small" if:false={cell.alwaysEditing}>
+                                            <lightning-button-icon icon-name="utility:check"
+                                                                   if:true={cell.hasSaveButton}
+                                                                   variant="bare"
+                                                                   alternative-text="Save"
+                                                                   name={cell}
+                                                                   onclick={cell.onEditSubmit}
+                                            >
+                                            </lightning-button-icon>
+                                            <span if:true={cell.hasSaveButton}>&nbsp;&nbsp;</span>
+                                            <lightning-button-icon icon-name="utility:close"
+                                                                   variant="bare"
+                                                                   alternative-text="Cancel"
+                                                                   name={cell}
+                                                                   onclick={cell.cancelEdit}
+                                            >
+                                            </lightning-button-icon>
+                                        </div>
+                                        <lightning-spinner alternative-text="loading"
+                                                           if:true={cell.extra.$isWaiting}></lightning-spinner>
+                                    </div>
+                                </div>
+                            </td>
+                        </template>
+                    </tr>
+                </template>
+                </tbody>
+                <thead class="table-head" if:false={hideHeader}>
+                <tr class="slds-line-height_reset">
+                    <template for:item="column" for:each={computedColumns} for:index="i">
+                        <th aria-label={column.label} key={column.symbol} class={column.thClass} scope="col"
+                            style={column.style}>
+                            <div class={column.innerClass} data-row-field={column.field} data-sortable={column.sortable}
+                                 style={column.innerStyle}
+                                 onclick={changeSortHandler}>
+                                <div class="cell-start">
+                                    <template for:each={column.resultTooltips} for:item="tooltip">
+                                        <div key={tooltip.key}>
+                                            <div if:true={tooltip.isCustom}>
+                                                <c-lightning-help-text if:true={tooltip.position.isStart}
+                                                                       icon-name={tooltip.icon}
+                                                                       icon-variant={tooltip.variant}
+                                                                       content={tooltip.info}></c-lightning-help-text>
+                                            </div>
+                                            <div if:false={tooltip.isCustom}>
+                                                <lightning-helptext if:true={tooltip.position.isStart}
+                                                                    icon-name={tooltip.icon}
+                                                                    icon-variant={tooltip.variant}
+                                                                    content={tooltip.info}></lightning-helptext>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                                <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate cell-content">
+                                    <template for:each={column.resultTooltips} for:item="tooltip">
+                                        <div key={tooltip.key}>
+                                            <div if:true={tooltip.isCustom}>
+                                                <c-lightning-help-text if:true={tooltip.position.isInsertBefore}
+                                                                       icon-name={tooltip.icon}
+                                                                       icon-variant={tooltip.variant}
+                                                                       content={tooltip.info}></c-lightning-help-text>
+                                            </div>
+                                            <div if:false={tooltip.isCustom}>
+                                                <lightning-helptext if:true={tooltip.position.isInsertBefore}
+                                                                    icon-name={tooltip.icon}
+                                                                    icon-variant={tooltip.variant}
+                                                                    content={tooltip.info}></lightning-helptext>
+                                            </div>
+                                        </div>
+                                    </template>
+                                    <span class="slds-truncate cell-main" title={column.label}>
+                                {column.label}
+                                </span>
+                                    <span class="slds-icon_container">
+                                  <template for:each={column.resultTooltips} for:item="tooltip">
+                                      <div key={tooltip.key}>
+                                          <div if:true={tooltip.isCustom}>
+                                                <div if:true={tooltip.position.isAppend}>
+                                                      <c-lightning-help-text icon-name={tooltip.icon}
+                                                                             icon-variant={tooltip.variant}
+                                                                             content={tooltip.info}></c-lightning-help-text>
+                                                </div>
+                                          </div>
+                                          <div if:false={tooltip.isCustom}>
+                                                <div if:true={tooltip.position.isAppend}>
+                                                      <lightning-helptext icon-name={tooltip.icon}
+                                                                          icon-variant={tooltip.variant}
+                                                                          content={tooltip.info}></lightning-helptext>
+                                                </div>
+                                          </div>
+                                      </div>
+                                </template>
+                                </span>
+                                    <span if:true={column.showSort} class={column.sortClass}>
+                                    <lightning-icon icon-name={column.sortIcon} size="xx-small"></lightning-icon>
+                                </span>
+                                </div>
+                            </div>
+                            <div class="slds-th__action-button">
+                                <template for:each={column.resultTooltips} for:item="tooltip">
+                                    <div key={tooltip.key}>
+                                        <div if:true={tooltip.isCustom}>
+                                            <c-lightning-help-text if:true={tooltip.position.isEnd}
+                                                                   icon-name={tooltip.icon}
+                                                                   icon-variant={tooltip.variant}
+                                                                   content={tooltip.info}></c-lightning-help-text>
+                                        </div>
+                                        <div if:false={tooltip.isCustom}>
+                                            <lightning-helptext if:true={tooltip.position.isEnd}
+                                                                icon-name={tooltip.icon}
+                                                                icon-variant={tooltip.variant}
+                                                                content={tooltip.info}></lightning-helptext>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </th>
+                    </template>
+                </tr>
+                </thead>
+            </table>
+            <div class="slds-m-top--small slds-text-align_center" if:true={hasEditorActionButton}>
+                <lightning-button label="Save" variant="brand" class="slds-m-right--medium"
+                                  onclick={saveAll}></lightning-button>
+                <lightning-button label="Cancel" onclick={cancelSave}></lightning-button>
+            </div>
+        </div>
+    </div>
+</template>

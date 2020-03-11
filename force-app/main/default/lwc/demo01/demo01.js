@@ -3,9 +3,9 @@ import {LightningElement, track} from 'lwc';
 export default class Demo01 extends LightningElement {
 
     @track userList = [
-        {id: 1, name: 'Li Ming', age: 18},
-        {id: 2, name: 'Li Han', age: 19},
-        {id: 3, name: 'Li Long', age: 20},
+        {id: '1', name: 'Li Ming', age: 18},
+        {id: '2', name: 'Li Han', age: 19},
+        {id: '3', name: 'Li Long', age: 20},
     ];
 
     get rows() {
@@ -19,7 +19,7 @@ export default class Demo01 extends LightningElement {
                 header: {label: 'Name'},
                 cell: {
                     editable: ({row, index, rows, field}) => {
-                        if (row.id === 1) {
+                        if (row.id === '1') {
                             return true;
                         }
                         return false;

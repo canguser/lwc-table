@@ -27,11 +27,11 @@ const parseFunction = (obj) => {
 };
 
 const parseFunctionFields = (obj) => {
-    const result = {};
-    for (const key of Object.keys(obj)) {
-        result[key] = parseFunction(obj[key]);
-    }
-    return result;
+    return Utils.fromEntries(
+        Object.entries(obj).map(
+            ([key, value]) => [key, parseFunction(value)]
+        )
+    );
 };
 
 const parseObjectFields = (obj, ...args) => {
@@ -75,6 +75,18 @@ const preOrderTraversalTree = (tree, cb) => {
     });
 };
 
+const parseFuncParams = (target, fields = []) => {
+    return new Proxy(target, {
+        get(target, p, receiver) {
+            const value = Reflect.get(target, p, receiver);
+            if (fields.includes(p)) {
+                return value();
+            }
+            return value;
+        }
+    });
+};
+
 export {
     parseBoolean,
     parseFunction,
@@ -84,5 +96,6 @@ export {
     parsePosition,
     preOrderTraversalTree,
     genID,
-    hasChildNode
+    hasChildNode,
+    parseFuncParams
 };

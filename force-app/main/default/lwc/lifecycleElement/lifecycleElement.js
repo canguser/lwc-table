@@ -5,24 +5,24 @@
 import { LightningElement, track } from 'lwc';
 import Utils from 'c/utils';
 import formFactorPropertyName from '@salesforce/client/formFactor';
-
+const isMobileNormal = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+const isMobile = formFactorPropertyName.toLowerCase() === 'small' || formFactorPropertyName.toLowerCase() === 'medium';
 export default class LifecycleElement extends LightningElement {
     @track
     hasInit = false;
     @track
     isProcessLoading = false;
-
-    browserInfo = {};
-
-    tasks = [];
-
-    firstRendered = false;
+    isMounted = false;
 
     connectedCallback() {
         if (!this.hasInit) {
             this.hasInit = true;
-            this.init();
+            this.tasks = this.tasks || [];
+            this.browserInfo = this.browserInfo || {};
+            this.firstRendered = false;
+            this.created();
         }
+        this.init();
     }
 
     renderedCallback() {
@@ -38,6 +38,17 @@ export default class LifecycleElement extends LightningElement {
     }
 
     disconnectedCallback() {
+        this.destroyCallbacks.forEach(cb => {
+            cb();
+        });
+        this.destroyCallbacks = [];
+    }
+
+    destroyCallbacks = [];
+    mountedCallbacks = [];
+
+    onDestroy(cb) {
+        this.destroyCallbacks.push(cb);
     }
 
     errorCallback(error, stack) {
@@ -45,28 +56,42 @@ export default class LifecycleElement extends LightningElement {
     }
 
     mounted() {
+        this.mountedCallbacks.forEach(cb => {
+            cb();
+        });
+        this.mountedCallbacks = [];
+        this.isMounted = true;
+    }
+
+    onMounted(cb) {
+        this.mountedCallbacks.push(cb);
+    }
+
+    afterMounted() {
+        if (this.isMounted) {
+            return Promise.resolve();
+        }
+        return new Promise(resolve => {
+            this.onMounted(() => {
+                resolve();
+            });
+        });
     }
 
     constructor() {
         super();
-        this.processManager = Utils.ProcessManager.newInstance(this, {
-            end() {
-                this.isProcessLoading = false;
-            },
-            begin() {
-                this.isProcessLoading = true;
-            }
-        });
+        this.processManager = Utils.registerProcessLoading(this, 'isProcessLoading', {});
+    }
+
+    created() {
     }
 
     init() {
-        this.browserInfo.isMobileNomal = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        this.browserInfo.isMobile = formFactorPropertyName.toLowerCase() === 'small' || formFactorPropertyName.toLowerCase() === 'medium';
     }
 
     get isMobile() {
-        // return false;
-        return this.browserInfo.isMobile == null ? this.browserInfo.isMobileNomal : this.browserInfo.isMobile;
+        // return true;
+        return isMobile == null ? isMobileNormal : isMobile;
     }
 
     /**
@@ -87,8 +112,30 @@ export default class LifecycleElement extends LightningElement {
         this.tasks.push({ api, action });
     }
 
+    /**
+     * @param cb {function=}
+     */
+    $nextTick(cb = () => undefined) {
+        this.queueTasks({
+            action() {
+                cb();
+                return true;
+            }
+        });
+    }
+
     handleError(...error) {
+        if (error.length === 0) {
+            return;
+        }
         Utils.error(this, ...error);
+    }
+
+    checkRenderTime(api = Utils.genID(6)) {
+        console.time(api);
+        this.$nextTick(() => {
+            console.timeEnd(api);
+        });
     }
 
     handleSuccess(...success) {

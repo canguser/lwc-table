@@ -4,8 +4,14 @@
 
 import { api, track } from 'lwc';
 import LifecycleElement from 'c/lifecycleElement';
-import getReferenceObject from '@salesforce/apex/LookupHelper.getReferenceObject';
-import getObjectName from '@salesforce/apex/LookupHelper.getObjectName';
+import getReferenceObjectOrigin from '@salesforce/apex/LookupHelper.getReferenceObject';
+import getObjectNameOrigin from '@salesforce/apex/LookupHelper.getObjectName';
+import Utils from 'c/utils';
+
+const ActionManager = new Utils.IdentityAction();
+
+const getReferenceObject = ActionManager.wrap({getReferenceObjectOrigin}).identity({ local: 'getReferenceObject' });
+const getObjectName = ActionManager.wrap({getObjectNameOrigin}).identity({ local: 'getReferenceObject' });
 
 export default class LightningLookup extends LifecycleElement {
 
@@ -18,12 +24,25 @@ export default class LightningLookup extends LifecycleElement {
     @api name = null;
     @api whereCase = null;
     @api variant = 'standard';
+    @api fieldLevelHelp = '';
 
     @track _compareFields = [];
     @track _descFields = [];
     @track _noDesc = false;
 
     @api lookupTo = '';
+
+    get type() {
+        return this.readonly ? 'text' : 'search';
+    }
+
+    get readOnly() {
+        return this.readonly;
+    }
+
+    @api set readOnly(v) {
+        this.readonly = v;
+    }
 
     @api set compareFields(v) {
         if (v != null && v !== this._compareFields) {
@@ -46,11 +65,19 @@ export default class LightningLookup extends LifecycleElement {
     @track displayValue = '';
     @track isFocus = false;
     @track isSearching = false;
-    @track realValue = '';
+    @track realValue = null;
 
     @track lookupItems = [];
 
     /* GETTER */
+
+    get lookupUsedItems() {
+        return (this.lookupItems || []).map(
+            item => ({
+                ...item
+            })
+        );
+    }
 
     get compareFields() {
         return this._compareFields;
@@ -110,7 +137,7 @@ export default class LightningLookup extends LifecycleElement {
         return this.lookupItems.map(item => {
             const referenceDesc = item.referenceDesc || [];
             const desc = referenceDesc[0];
-            return { ...item, describe: desc || item.referenceId };
+            return { ...item, describe: desc, noDesc: this.noDesc || !desc };
         });
     }
 
@@ -164,19 +191,26 @@ export default class LightningLookup extends LifecycleElement {
     }
 
     handleChanged(e) {
-        this.displayValue = e.detail.value;
+        this.displayValue = e.detail.value || '';
         if (this.displayValue === '') {
             this.value = '';
         }
         this.fetchReference();
+        this.preventEvent(e);
     }
 
     handleFocus() {
+        if (this.readonly) {
+            return;
+        }
         this.isFocus = true;
         this.fetchReference();
     }
 
     handleBlur() {
+        if (this.readonly) {
+            return;
+        }
         this.isFocus = false;
         let selectedItem = this.selectedItem;
         this.displayValue = selectedItem['referenceName'] || '';
@@ -188,13 +222,16 @@ export default class LightningLookup extends LifecycleElement {
     fetchReference() {
         this.isSearching = true;
         this.delay('fetchReference', 500).then(
-            () => getReferenceObject({
-                recordName: this.lookupTo,
-                compareFields: this.compareFields.join(','),
-                descFields: this.descFields.join(','),
-                value: this.displayValue,
-                whereCase: this.whereCase
-            })
+            () => {
+                this.lookupItems = [];
+                return getReferenceObject({
+                    recordName: this.lookupTo,
+                    compareFields: this.compareFields.join(','),
+                    descFields: this.descFields.join(','),
+                    value: this.displayValue || '',
+                    whereCase: this.whereCase
+                });
+            }
         ).then(lookupItems => {
             this.isSearching = false;
             this.lookupItems = lookupItems;
@@ -206,7 +243,7 @@ export default class LightningLookup extends LifecycleElement {
 
     fetchObjectName() {
         this.isSearching = true;
-        this.delay('fetchObjectName', 500).then(
+        this.delay('fetchObjectName', 200).then(
             () => getObjectName({
                 recordName: this.lookupTo,
                 id: this.value
@@ -214,6 +251,15 @@ export default class LightningLookup extends LifecycleElement {
         ).then(name => {
             this.isSearching = false;
             this.displayValue = name;
+            if (this.reportValidity()) {
+                this.dispatchEvent(new CustomEvent('infoload', {
+                    detail: {
+                        value: this.value,
+                        name: this.name,
+                        label: this.displayValue
+                    }
+                }));
+            }
         }).catch(e => {
             this.isSearching = false;
             console.log(e);
@@ -228,5 +274,13 @@ export default class LightningLookup extends LifecycleElement {
                 resolve(true);
             }, ms);
         });
+    }
+
+    @api
+    reportValidity() {
+        if (!this.searchInput) {
+            return false;
+        }
+        return this.searchInput.reportValidity();
     }
 }

@@ -13,11 +13,20 @@ export default class LightningMultipicklist extends LifecycleElement {
     @api name = null;
     @api variant = '';
     @api size = 4;
+    @api fieldLevelHelp = '';
 
     @api options = [];
 
     @track isFocus = false;
     @track realValue = '';
+
+    get readOnly() {
+        return this.readonly;
+    }
+
+    @api set readOnly(v) {
+        this.readonly = v;
+    }
 
     /* GETTER */
     get isBlur() {

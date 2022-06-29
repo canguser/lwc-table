@@ -5,13 +5,25 @@
     display: inline-block;
     position: relative;
 }
-.popover-tooltip{
+
+.popover-tooltip {
     position: absolute;
     display: none;
 }
+
 .popover-tooltip_bottom-left {
     bottom: 1.75rem;
     left: -1rem;
+}
+
+.popover-tooltip_top-right {
+    top: 1.5rem;
+    right: 1rem;
+}
+
+.popover-tooltip_top-left {
+    top: 1.5rem;
+    right: -1rem;
 }
 
 .popover-tooltip_bottom-right {
@@ -26,4 +38,17 @@
 .text-content {
     line-height: 1rem;
     font-weight: normal;
+    white-space: pre;
+}
+
+.slds-popover_tooltip {
+    max-width: max-content;
+}
+
+.no-icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
 }

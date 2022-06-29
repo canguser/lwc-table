@@ -1,0 +1,14 @@
+/**
+ * Created by ryan on 2019/12/28.
+ */
+.slds-dropdown__item:hover > .slds-dropdown_submenu {
+    display: block;
+}
+
+.slds-dropdown_submenu-right {
+    margin-left: -.1rem;
+}
+
+.slds-dropdown_submenu-left {
+    margin-right: -.1rem;
+}

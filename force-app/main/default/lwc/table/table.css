@@ -15,6 +15,11 @@
     top: .2rem;
 }
 
+.icon-adapt {
+    position: relative;
+    bottom: -.1rem;
+}
+
 .editor {
     display: none;
 }
@@ -32,6 +37,8 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    position: relative;
+    z-index: 100;
 }
 
 .editor-input.outer-editor {
@@ -112,8 +119,42 @@ table.no-padding-cell th {
     padding-right: 1.5rem;
 }
 
+.has-cell-edit-end.hover-edit .shown-on-hover:not(:hover) .slds-th__action.cell-action {
+    padding-right: var(--lwc-spacingXSmall, 0.5rem);
+}
+
+.has-cell-edit-start.hover-edit .shown-on-hover:not(:hover) .slds-th__action.cell-action {
+    padding-left: var(--lwc-spacingXSmall, 0.5rem);
+}
+
+.cell-popover {
+    display: none;
+    position: absolute;
+    width: auto;
+    max-width: var(--lwc-sizeMedium, 20rem);
+    min-width: 10rem;
+}
+
+.cell-popover-parent:hover .cell-popover {
+    display: inline-block;
+}
+
+.cell-popover.slds-nubbin_left-top {
+    left: 110%;
+    top: -20%;
+}
+
+.cell-popover.slds-nubbin_right-top {
+    right: 110%;
+    top: -20%;
+}
+
 .slds-th__action.cell-inner:hover {
     background-color: white;
+}
+
+td:hover {
+    background-color: white !important;
     box-shadow: var(--lwc-colorBorder, rgb(221, 219, 218)) 0 calc(-1 * var(--lwc-borderWidthThin, 1px)) 0 inset, var(--lwc-colorBorder, rgb(221, 219, 218)) 0 1px 0 inset
 }
 
@@ -135,6 +176,7 @@ table.auto-width {
     /*width: 100%;*/
     /*overflow-x: auto;*/
     /*background-color: #dddbda;*/
+    position: relative;
 }
 
 .outer-editor {
@@ -152,14 +194,30 @@ table.auto-width {
     position: absolute;
     background: white;
     z-index: 998;
-    min-width: 100%;
     top: 0;
+    bottom: 0;
     /*box-shadow: 0 0 1px 1px #ebebeb;*/
     /*border-radius: 3px;*/
 }
 
+
+.shown-on-hover:not(.shown-on-nowrap):hover .slds-th__action {
+    height: auto;
+    min-height: 2rem;
+}
+
+.shown-on-hover:not(.shown-on-nowrap):hover .slds-truncate {
+    overflow-x: auto;
+    text-overflow: inherit;
+    white-space: pre-line;
+}
+
 .shown-on-hover-right:hover {
     right: 0;
+}
+
+.cell-shown-on:not(:hover) {
+    min-width: 100% !important;
 }
 
 .outer-editor-right {
@@ -215,4 +273,17 @@ tr:hover .action-row-hover {
 
 .editor-input.error {
     background: #ffe6c4;
+}
+
+.textarea-item.is-focus {
+    height: 2rem;
+}
+
+.editor-input.is-focus {
+    z-index: 101;
+}
+
+/* works */
+tr:hover > td {
+    box-shadow: none!important;
 }

@@ -62,3 +62,21 @@ table .repair-datepicker tbody tr td {
     width: auto;
     border: none;
 }
+
+.textarea-large .textarea-container textarea {
+    min-height: 15rem;
+    min-width: 25rem;
+}
+
+.textarea-item.expand:not(.is-focus) textarea {
+    height: 2rem !important;
+}
+
+.textarea-item.expand.is-focus textarea {
+    min-height: 10rem;
+    position: absolute;
+}
+
+tr:hover .action-row-hover {
+    visibility: visible;
+}

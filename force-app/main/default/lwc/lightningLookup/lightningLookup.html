@@ -9,13 +9,14 @@
             <!--{v}-->
             <lightning-input
                     class="searing-input"
-                    type="search"
+                    type={type}
                     required={required}
                     readonly={readonly}
                     disabled={disabled}
                     value={displayValue}
                     name={name}
                     message-when-value-missing={messageWhenValueMissing}
+                    field-level-help={fieldLevelHelp}
                     is-loading={isSearching}
                     variant={variant}
                     label={label}
@@ -24,9 +25,9 @@
                     onblur={handleBlur}>
             </lightning-input>
         </div>
-        <div if:true={showCombobox} class="slds-is-relative slds-size--12-of-12" onmousedown={preventEvent}>
+        <div if:true={showCombobox} class="slds-is-relative slds-size--12-of-12 slds-dropdown-trigger_click slds-is-open" onmousedown={preventEvent}>
             <div class={comboboxClass}>
-                <ul class="slds-listbox slds-listbox_vertical">
+                <ul class="slds-listbox slds-listbox_vertical slds-droc">
                     <template if:true={hasItems} for:each={itemsWithDescribe} for:item="item">
                         <li class="slds-listbox__item slds-border--bottom" key={item.referenceId}
                             data-reference-id={item.referenceId}
@@ -37,10 +38,10 @@
                                     <lightning-icon icon-name={recordIcon} size="medium"></lightning-icon>
                                 </div>
                                 <div class="slds-media__body slds-truncate">
-                                    <span if:true={noDesc}>
+                                    <span if:true={item.noDesc}>
                                         <span class="slds-listbox__option-text">{item.referenceName}</span>
                                     </span>
-                                    <span if:false={noDesc}>
+                                    <span if:false={item.noDesc}>
                                         <span class="slds-listbox__option-text slds-listbox__option-text_entity">{item.referenceName}</span>
                                         <span class="slds-listbox__option-meta slds-listbox__option-meta_entity slds-text-color_weak slds-text-title slds-truncate">{item.describe}</span>
                                     </span>

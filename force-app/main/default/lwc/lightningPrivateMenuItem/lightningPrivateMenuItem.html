@@ -1,0 +1,26 @@
+<!--
+ - Created by ryan on 2019/12/28.
+ -->
+
+<!-- Lightning Private Menu Item -->
+<template>
+    <ul class="slds-dropdown__list slds-p-top_xx-small slds-p-bottom_xx-small" role="menu" aria-label="Show More">
+        <template for:each={computedItems} for:item="item">
+            <li key={item.key} class={item.liClass} onclick={handleTouchItem}
+                data-value={item.value}
+                role="presentation">
+                <a role="menuitem" class={item.aClass} tabindex="0" aria-haspopup={item.hasChildren}>
+                    <lightning-icon class="slds-m-right_small slds-shrink-none" size="x-small" icon-name={item.icon}
+                                    if:true={item.isLeftIcon}></lightning-icon>
+                    <span class="slds-truncate slds-grow" title={item.label}>{item.label}</span>
+                    <lightning-icon class="slds-m-left_small slds-shrink-none" size="x-small" icon-name={item.icon}
+                                    if:true={item.isRightIcon}></lightning-icon>
+                </a>
+                <div if:true={item.hasChildren} class={item.subClass}>
+                    <c-lightning-private-menu-item items={item.children}
+                                                   orientation={orientation}></c-lightning-private-menu-item>
+                </div>
+            </li>
+        </template>
+    </ul>
+</template>

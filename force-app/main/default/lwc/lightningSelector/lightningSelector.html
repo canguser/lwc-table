@@ -1,0 +1,23 @@
+<!--
+ - Created by ryan on 2020/5/7.
+ -->
+
+<!-- Lightning Selector -->
+<template>
+    <div class="slds-form-element">
+        <label class="slds-form-element__label" for="selector">{label}</label>
+        <div class="slds-form-element__control">
+            <div class="slds-select_container">
+                <select class="slds-select" id="selector" onblur={handleBlur} onchange={handleChanged} onfocus={handleFocus}>
+                    <template for:each={mappedOptions} for:item="option">
+                        <option if:false={option.selected} key={option.value} value={option.value}>{option.label}
+                        </option>
+                        <option if:true={option.selected} key={option.value} selected="selected" value={option.value}>
+                            {option.label}
+                        </option>
+                    </template>
+                </select>
+            </div>
+        </div>
+    </div>
+</template>

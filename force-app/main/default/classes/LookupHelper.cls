@@ -1,13 +1,13 @@
 global with sharing class LookupHelper {
-    
+
     @AuraEnabled(Cacheable=true)
-    global static Reference[] getReferenceObject(String recordName,
+    global static LookupHelper.Reference[] getReferenceObject(String recordName,
             String compareFields,
             String descFields,
             String value,
             String whereCase)
     {
-        Reference[] references = new List<Reference>();
+        LookupHelper.Reference[] references = new List<LookupHelper.Reference>();
         if (recordName == null || recordName == '')
         {
             return references;
@@ -79,7 +79,7 @@ global with sharing class LookupHelper {
                     referenceDesc.add(fValue);
                 }
             }
-            references.add(new Reference(
+            references.add(new LookupHelper.Reference(
                     (String) result.get('Name'),
                     (String) result.get('Id'),
                     referenceDesc));

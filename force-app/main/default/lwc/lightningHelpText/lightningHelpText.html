@@ -4,14 +4,15 @@
 
 <!-- Lightning Help Text -->
 <template>
-    <div class="helptext-container">
-        <button class="slds-button popover-icon">
+    <div class={rootClasses}>
+        <div if:true={noIcon} class="popover-icon no-icon"></div>
+        <button if:false={noIcon} class="slds-button popover-icon">
             <lightning-icon icon-name={iconName}
                             size="xx-small"
                             variant={iconVariant}
                             alternative-text={content}></lightning-icon>
         </button>
-        <div class={popoverClassName}>
+        <div class={popoverClassName} style={offsetStyle}>
             <div class="slds-popover__body">
                 <slot name="content">
                     <template for:each={contentSplits} for:item="split">

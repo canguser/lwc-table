@@ -1,0 +1,300 @@
+/**
+ * Created by ryan on 2020/8/13.
+ */
+
+
+.cell {
+    padding-bottom: .2rem;
+}
+
+.cell-text {
+    position: relative;
+    top: .2rem;
+}
+
+.icon-adapt {
+    position: relative;
+    bottom: -.1rem;
+}
+
+.editor {
+    display: none;
+}
+
+.table-cell {
+    display: flex;
+    align-items: center;
+}
+
+.cell-wrap {
+    max-width: 100%;
+}
+
+.table-cell:hover .editor {
+    display: inline-block;
+}
+
+.editor-input {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    position: relative;
+    z-index: 100;
+}
+
+.editor-input.outer-editor {
+    width: auto;
+}
+
+.editor-input > div.action {
+    flex-shrink: 0;
+}
+
+.editor-input .cell-input {
+    flex-shrink: 1;
+    flex-grow: 1;
+}
+
+
+.cell-input {
+    transform: translateZ(0);
+}
+
+.auto-width .editor-input .cell-input > * {
+    min-width: 15rem;
+}
+
+.cell-main {
+    position: relative;
+    display: flex;
+    align-items: center;
+    max-width: 100%;
+}
+
+.cell-box {
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.outer-editor {
+    position: absolute;
+    min-width: 15rem;
+    border: 1px solid #efefef;
+    border-radius: 6px;
+    background-color: white;
+    z-index: 999;
+    box-shadow: 1px 1px 1px 1px #a1a1a1;
+    top: 0;
+}
+
+.outer-editor-right {
+    right: 0;
+}
+
+
+.editor-input.outer-editor {
+    width: auto;
+}
+
+.editor-input > div.action {
+    flex-shrink: 0;
+}
+
+.editor-input .cell-input {
+    flex-shrink: 1;
+    flex-grow: 1;
+}
+
+.editor-input.error {
+    background: #ffe6c4;
+}
+
+.textarea-item.is-focus {
+    height: 2rem;
+}
+
+.editor-input.is-focus {
+    z-index: 101;
+}
+
+.shown-on-hover:hover {
+    position: absolute;
+    background: white;
+    z-index: 998;
+    top: 0;
+    bottom: 0;
+    /*box-shadow: 0 0 1px 1px #ebebeb;*/
+    /*border-radius: 3px;*/
+}
+
+.shown-on-hover:not(.shown-on-nowrap):hover .slds-th__action {
+    height: auto;
+    min-height: 2rem;
+}
+
+.shown-on-hover:not(.shown-on-nowrap):hover .slds-truncate {
+    overflow-x: auto;
+    text-overflow: inherit;
+    white-space: pre-line;
+}
+
+.shown-on-hover-right:hover {
+    right: 0;
+}
+
+.cell-shown-on {
+    min-width: 100% !important;
+}
+
+.wrapped-cell .cell-action .slds-truncate {
+    white-space: pre-wrap;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+
+.cell-popover {
+    display: none;
+    position: absolute;
+    width: auto;
+    max-width: var(--lwc-sizeMedium, 20rem);
+    min-width: 10rem;
+}
+
+.cell-popover-parent:hover .cell-popover {
+    display: inline-block;
+}
+
+.slds-th__action {
+    min-height: 2rem;
+    height: auto;
+}
+
+.has-cell-start .slds-th__action.cell-action {
+    padding-left: 1.5rem;
+}
+
+.has-cell-end .slds-th__action.cell-action {
+    padding-right: 1.5rem;
+}
+
+.has-cell-edit-end.hover-edit.shown-on-hover:not(:hover) .slds-th__action.cell-action {
+    padding-right: var(--lwc-spacingXSmall, 0.5rem);
+}
+
+.has-cell-edit-start.hover-edit.shown-on-hover:not(:hover) .slds-th__action.cell-action {
+    padding-left: var(--lwc-spacingXSmall, 0.5rem);
+}
+
+.cell-popover.slds-nubbin_left-top {
+    left: 110%;
+    top: -20%;
+}
+
+.cell-popover.slds-nubbin_right-top {
+    right: 110%;
+    top: -20%;
+}
+
+
+.cell-start {
+    position: absolute;
+    top: 50%;
+    left: 0.25rem;
+    transform: translateY(-50%);
+}
+
+.cell-end {
+    position: absolute;
+    top: 50%;
+    right: 0.25rem;
+    transform: translateY(-50%);
+}
+
+
+.waiting-background {
+    background: rgb(250, 245, 230);
+}
+
+.slds-th__action:focus, .slds-th__action:hover {
+    background-color: rgb(255, 255, 255) !important;
+}
+
+.editor-input.error {
+    background: #ffe6c4;
+}
+
+.textarea-item.is-focus {
+    height: 2rem;
+}
+
+.editor-input.is-focus {
+    z-index: 101;
+}
+
+.table-cell:hover .action-row-hover {
+    visibility: visible;
+}
+
+
+/*avatar-desc*/
+.avatar-desc {
+    padding: .1rem;
+}
+
+.desc-text {
+    color: #494949;
+}
+
+/*progress-bar*/
+.progress-bar-box .cell-wrap, .progress-bar-box .cell-main {
+    width: 100%;
+}
+
+.process-bar {
+    display: flex;
+    padding-top: .25rem;
+    align-items: center;
+    padding-bottom: .25rem;
+    position: relative;
+}
+
+.bar-overflow {
+    background-color: #4CAF50 !important;
+}
+
+.progress-percentage-text {
+    min-width: 3.25rem;
+    /* padding-left: .1rem; */
+    text-align: center;
+    color: #3c89cb;
+    font-size: .55rem;
+    margin-left: .1rem;
+    background-color: #f0f0f0;
+    border-radius: 71px;
+}
+
+.progress-main-text {
+    text-align: left;
+    font-size: 1rem;
+    height: 1.6rem;
+    padding-top: .3rem;
+}
+
+.slds-progress-bar {
+    transition: background-color 0.5s;
+}
+
+.editor-helper-text {
+    border-left: 5px solid #92b1e1;
+    padding-left: .25rem;
+    font-size: .75rem;
+}
+
+.slds-truncate.no-truncate {
+    overflow: visible;
+}
